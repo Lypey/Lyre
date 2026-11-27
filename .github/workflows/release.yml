@@ -88,8 +88,11 @@ jobs:
         run: |
           # Android needs the cdylib crate type that the Windows GNU build leaves out (see Cargo.toml)
           sed -i 's/crate-type = \["staticlib", "rlib"\]/crate-type = ["staticlib", "cdylib", "rlib"]/' Cargo.toml
-          npx --yes @tauri-apps/cli@^2 android init --ci
-          npx --yes @tauri-apps/cli@^2 android build --apk
+          # on failure, post the log's end as an annotation (readable without signing in to GitHub)
+          { npx --yes @tauri-apps/cli@^2 android init --ci && npx --yes @tauri-apps/cli@^2 android build --apk; } 2>&1 | tee build.log
+          rc=${PIPESTATUS[0]}
+          if [ "$rc" != 0 ]; then echo "::error title=Android build::$(grep -v '^\s*$' build.log | tail -60 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/
+/%0A/g')"; exit "$rc"; fi
       - name: Sign and upload APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
