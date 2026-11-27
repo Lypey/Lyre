@@ -4,16 +4,12 @@ name: Release
 on:
   push:
     tags: ['v*']
-    branches: [main]
-    paths: ['.github/workflows/release.yml'] # workflow edits only test-build Android, no release
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/')
     strategy:
       fail-fast: false
       matrix:
@@ -53,53 +49,7 @@ jobs:
           tauriScript: npx --yes @tauri-apps/cli@^2
           tagName: ${{ github.ref_name }}
           releaseName: Lyre ${{ github.ref_name }}
-          releaseBody: "Windows: Lyre_..._x64-setup.exe · Mac: .dmg (aarch64 = Apple Silicon, x64 = Intel) · Linux: .AppImage, .deb or .rpm · Android: Lyre_..._android.apk. Desktop copies update themselves."
+          releaseBody: "Windows: Lyre_..._x64-setup.exe · Mac: .dmg (aarch64 = Apple Silicon, x64 = Intel) · Linux: .AppImage, .deb or .rpm. Desktop copies update themselves."
           releaseDraft: false
           args: ${{ matrix.args }}
 
-  android:
-    needs: build # the desktop jobs create the release this uploads to
-    if: ${{ !cancelled() && needs.build.result != 'failure' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '17'
-      - name: Android SDK and NDK # the Ubuntu runner already has the SDK
-        run: |
-          sdk="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-          yes | "$sdk" --licenses > /dev/null || true
-          "$sdk" "ndk;27.0.12077973" "build-tools;35.0.0" "platforms;android-35"
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
-      - uses: swatinem/rust-cache@v2
-        with:
-          workspaces: src-tauri -> target
-      - name: Build APK
-        working-directory: src-tauri
-        run: |
-          export NDK_HOME="$ANDROID_HOME/ndk/27.0.12077973" # ANDROID_HOME comes from the runner, so set this in the shell
-          # Android needs the cdylib crate type that the Windows GNU build leaves out (see Cargo.toml)
-          sed -i 's/crate-type = \["staticlib", "rlib"\]/crate-type = ["staticlib", "cdylib", "rlib"]/' Cargo.toml
-          # on failure, post the log's end as an annotation (readable without signing in to GitHub)
-          { npx --yes @tauri-apps/cli@^2 android init --ci && npx --yes @tauri-apps/cli@^2 android build --apk; } 2>&1 | tee build.log
-          rc=${PIPESTATUS[0]}
-          if [ "$rc" != 0 ]; then echo "::error title=Android build::$(grep -v '^\s*$' build.log | tail -60 | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')"; exit "$rc"; fi
-      - name: Sign and upload APK
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-        run: |
-          echo "$ANDROID_KEYSTORE" | base64 -d > lyre.p12
-          apk="Lyre_${GITHUB_REF_NAME#v}_android.apk"
-          # shortcut: fixed keystore password; the keystore itself is the secret
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks lyre.p12 --ks-type PKCS12 --ks-pass pass:lyre-android \
-            --out "$apk" src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify "$apk"
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then gh release upload "$GITHUB_REF_NAME" "$apk" --clobber; fi
