@@ -83,9 +83,8 @@ jobs:
           workspaces: src-tauri -> target
       - name: Build APK
         working-directory: src-tauri
-        env:
-          NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.12077973
         run: |
+          export NDK_HOME="$ANDROID_HOME/ndk/27.0.12077973" # ANDROID_HOME is the runner's, so it isn't visible to ${{ env }}
           # Android needs the cdylib crate type that the Windows GNU build leaves out (see Cargo.toml)
           sed -i 's/crate-type = \["staticlib", "rlib"\]/crate-type = ["staticlib", "cdylib", "rlib"]/' Cargo.toml
           # on failure, post the log's end as an annotation (readable without signing in to GitHub)
