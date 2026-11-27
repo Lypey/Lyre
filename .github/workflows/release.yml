@@ -50,6 +50,50 @@ jobs:
           tauriScript: npx --yes @tauri-apps/cli@^2
           tagName: ${{ github.ref_name }}
           releaseName: Lyre ${{ github.ref_name }}
-          releaseBody: Download the installer for your computer below. Already have Lyre? It updates itself.
+          releaseBody: "Windows: Lyre_..._x64-setup.exe · Mac: .dmg (aarch64 = Apple Silicon, x64 = Intel) · Linux: .AppImage, .deb or .rpm · Android: Lyre_..._android.apk. Desktop copies update themselves."
           releaseDraft: false
           args: ${{ matrix.args }}
+
+  android:
+    needs: build # the desktop jobs create the release this uploads to
+    if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Android SDK and NDK
+        run: sdkmanager "ndk;27.0.12077973" "build-tools;35.0.0" "platforms;android-35"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+      - name: Build APK
+        working-directory: src-tauri
+        env:
+          NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.12077973
+        run: |
+          # Android needs the cdylib crate type that the Windows GNU build leaves out (see Cargo.toml)
+          sed -i 's/crate-type = \["staticlib", "rlib"\]/crate-type = ["staticlib", "cdylib", "rlib"]/' Cargo.toml
+          npx --yes @tauri-apps/cli@^2 android init --ci
+          npx --yes @tauri-apps/cli@^2 android build --apk
+      - name: Sign and upload APK
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        run: |
+          echo "$ANDROID_KEYSTORE" | base64 -d > lyre.p12
+          apk="Lyre_${GITHUB_REF_NAME#v}_android.apk"
+          # shortcut: fixed keystore password; the keystore itself is the secret
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks lyre.p12 --ks-type PKCS12 --ks-pass pass:lyre-android \
+            --out "$apk" src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify "$apk"
+          gh release upload "$GITHUB_REF_NAME" "$apk" --clobber
