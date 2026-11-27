@@ -1,0 +1,140 @@
+/*
+  @name Windows XP
+  @author Lyre
+  @description Blue title bars, rolling green hills and a taskbar
+  @mode light
+  @accent #316ac5
+  @text #000000
+  @preview linear-gradient(180deg,#0a5fe8 0 20%,#ece9d8 20% 72%,#245edb 72%)
+*/
+:root{
+  color-scheme:light;
+  font-family:Tahoma,Verdana,"DejaVu Sans",Geneva,sans-serif;
+  --r:8px; --dim-rgb:255,255,255; --dim-k:.15;
+  --title:linear-gradient(180deg,#0997ff 0%,#0053ee 8%,#0050ee 40%,#06f 88%,#06f 93%,#005bff 95%,#003dd7 96%,#003dd7 100%);
+  --xpbtn:linear-gradient(180deg,#fff 0%,#ecebe6 86%,#d6d0c5 100%);
+  --sel:#316ac5; --face:#ece9d8; --edge:#7f9db9;
+}
+body{font-size:12px;background:#3a6ea5}
+
+/* blue sky, soft clouds, green hills (CSS only) */
+#bg{background-color:#5d9cec;background-image:
+  radial-gradient(ellipse 30% 9% at 22% 20%,rgba(255,255,255,.9),rgba(255,255,255,0) 70%),
+  radial-gradient(ellipse 22% 7% at 33% 16%,rgba(255,255,255,.8),rgba(255,255,255,0) 70%),
+  radial-gradient(ellipse 26% 8% at 72% 13%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%),
+  radial-gradient(ellipse 18% 6% at 82% 24%,rgba(255,255,255,.6),rgba(255,255,255,0) 70%),
+  radial-gradient(ellipse 120% 62% at 30% 122%,#2f7d17 0 48%,#4a9a24 49% 50%,transparent 50.5%),
+  radial-gradient(ellipse 110% 56% at 95% 128%,#4f9f22 0 48%,#6dbb36 49% 50%,transparent 50.5%),
+  linear-gradient(180deg,#245fcf 0%,#4f8fe6 30%,#8fbff2 58%,#d3e8ff 72%)}
+
+/* panels are solid "windows" with a blue title bar */
+.glass{background:var(--face);-webkit-backdrop-filter:none;backdrop-filter:none;border:1px solid #0831d9;border-radius:8px 8px 3px 3px;box-shadow:2px 3px 10px rgba(0,0,0,.35)}
+#library,#main{position:relative;background:var(--title) top/100% 28px no-repeat,var(--face)}
+#library{padding-top:38px}
+#main{padding-top:28px}
+#library::before,#main::before{position:absolute;top:0;left:10px;right:10px;height:28px;line-height:28px;color:#fff;font-weight:700;font-size:13px;text-shadow:1px 1px #0f1089;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#library::before{content:"My Music"}
+#main::before{content:"Lyre"}
+.lib-head h2{color:#215dc6;font-size:13px}
+.lib-sub{color:#215dc6;letter-spacing:0;text-transform:none;font-weight:700}
+.lib-foot{border-top:1px solid #c6c3b6}
+
+/* the top bar is a title bar */
+#titlebar{background:var(--title);border-radius:8px 8px 0 0;padding:0 6px;min-height:34px;margin-top:6px;border:1px solid #0831d9;border-bottom:0}
+#titlebar .ib{color:#fff;width:30px;height:28px}
+#titlebar .ib:hover{background:rgba(255,255,255,.2);box-shadow:none;color:#fff}
+#titlebar .pill{background:var(--xpbtn);color:#000}
+.search{background:#fff;border:1px solid var(--edge);border-radius:0;height:26px;box-shadow:none;color:#000}
+.search input::placeholder{color:#7a7a7a}
+#winBtns .ib{width:22px!important;height:22px!important;border-radius:3px;border:1px solid #fff;background:linear-gradient(180deg,#3c8cfe,#0b55e4 60%,#1c6bff);margin-left:2px}
+#winBtns .ib:hover{filter:brightness(1.15);background:linear-gradient(180deg,#3c8cfe,#0b55e4 60%,#1c6bff)}
+#winBtns .close,#winBtns .close:hover{background:linear-gradient(180deg,#e87a5b,#d6401d 60%,#e05c35)}
+#winBtns .ic svg{width:12px;height:12px;stroke-width:3}
+
+/* buttons */
+.ib{color:#000;border-radius:3px}
+.ib:hover{background:#fff;box-shadow:inset 0 0 0 1px #8db2e3;color:#000}
+.ib.on{color:var(--sel)}
+.pill{background:var(--xpbtn);border:1px solid #003c74;border-radius:3px;color:#000;padding:4px 12px;font-size:12px}
+.pill:hover{background:var(--xpbtn);box-shadow:inset 0 0 0 2px #fbca5f}
+.pill.accent{background:var(--xpbtn);color:#000;font-weight:700;box-shadow:inset 0 0 0 1px #6b8fd4}
+.big-play,.art-play{background:linear-gradient(180deg,#5ec15e,#2f8a2f 60%,#3a9a3a);color:#fff;border:1px solid #1d6b1d;border-radius:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+
+/* the player bar is a taskbar with a green start-style play button */
+#player{background:linear-gradient(180deg,#3168d5 0%,#4993e6 3%,#2157d7 6%,#2663e0 10%,#245edb 50%,#2257d5 90%,#1941a5 100%);border:0;border-radius:0 0 6px 6px;color:#fff}
+#player .ib{color:#fff}
+#player .ib:hover{background:rgba(255,255,255,.18);box-shadow:none;color:#fff}
+#player .ib.on{color:#b6ff9a}
+#pArtist,.p-seek{color:#d6e4ff}
+#playBtn{width:62px;height:40px;border-radius:4px 16px 16px 4px;background:linear-gradient(180deg,#3c8f3c 0%,#5ec15e 10%,#3a9a3a 50%,#2f8a2f 90%,#1d6b1d 100%);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),1px 1px 3px rgba(0,0,0,.4)}
+#player input[type=range]{background:linear-gradient(to right,#9cff7a var(--p,0%),rgba(255,255,255,.35) var(--p,0%));border:0}
+
+/* lists & cards: XP blue selection */
+.pl-item:hover,.card:hover,.pcard:hover{background:#fff}
+.pl-item.active,.card.playing{background:var(--sel);box-shadow:none}
+.pl-item.active .name,.pl-item.active .sub,.card.playing .ttl,.card.playing .sub{color:#fff}
+.pl-item.playing .spk{color:#fff}
+.pcard{background:#fff;border:1px solid #d6d0c5;border-radius:3px}
+.pcard:hover{border-color:var(--sel)}
+.card,.pl-item{border-radius:2px}
+.card .art{border-radius:2px;box-shadow:1px 1px 4px rgba(0,0,0,.4)}
+.card-actions .ib{background:var(--xpbtn);border:1px solid #003c74}
+.cover{background:linear-gradient(135deg,#6b9bea,#245edb);color:#fff;border-radius:2px}
+.cover.liked{background:linear-gradient(135deg,#ff9a3c,#ffd27a)}
+.filter{background:#fff;border:1px solid var(--edge);border-radius:0;color:#000}
+.welcome{border:1px dashed var(--edge);background:#fff;border-radius:3px}
+.welcome h1{font-family:"Franklin Gothic Medium","Trebuchet MS",Tahoma,sans-serif;color:#215dc6}
+.pl-info h1{font-family:"Franklin Gothic Medium","Trebuchet MS",Tahoma,sans-serif;color:#215dc6;font-weight:700}
+.page .pl-info h1{font-size:34px}
+
+/* lyrics panel looks like a white document window */
+.now{background:#fff;border:1px solid var(--edge);border-radius:0}
+.now-head{background:linear-gradient(90deg,#fff,#c6d3f7);border-color:var(--edge)}
+.now-head .label{color:#215dc6}
+.lyrics{-webkit-mask-image:none;mask-image:none}
+.ln{color:#000}
+.ln.on{background:var(--sel);color:#fff;text-shadow:none}
+.ln.on .syl.on{filter:none}
+
+/* lyrics mode is a "Now Playing" window tinted by the song's cover */
+#immersive{--im-wash:rgba(255,255,255,.2)}
+body.immersive #immersive{background:var(--title) top/100% 28px no-repeat,rgba(236,233,216,.84);border:1px solid #0831d9;border-radius:8px 8px 3px 3px;padding-top:28px;box-shadow:2px 3px 10px rgba(0,0,0,.35)}
+body.immersive #immersive::before{content:"Now Playing";position:absolute;top:0;left:10px;right:10px;height:28px;line-height:28px;color:#fff;font-weight:700;font-size:13px;text-shadow:1px 1px #0f1089}
+#imInfo .cover{border-radius:2px;border:3px solid #fff;box-shadow:0 0 0 1px var(--edge),2px 3px 8px rgba(0,0,0,.4)}
+#imInfo h2{color:#215dc6;font-family:"Franklin Gothic Medium","Trebuchet MS",Tahoma,sans-serif}
+#imInfo .muted{color:#000}
+#imLyrics{background:#fff;border:1px solid var(--edge);margin:12px;height:calc(100% - 24px)}
+#imLyrics .ln{color:#000}
+#imLyrics .ln.on{color:#fff}
+body.immersive #player{background:linear-gradient(180deg,#3168d5 0%,#4993e6 3%,#2157d7 6%,#2663e0 10%,#245edb 50%,#2257d5 90%,#1941a5 100%)}
+
+/* settings, profile */
+.section{background:#fff;border:1px solid var(--edge);border-radius:4px}
+.section h2{color:#215dc6;border-bottom:1px solid #c6d3f7;padding-bottom:6px}
+.stat,.theme-card{background:#fff;border:1px solid var(--edge);border-radius:3px}
+.stat b{color:#215dc6}
+.theme-card.on{box-shadow:0 0 0 2px var(--sel)}
+.avatar{border-radius:4px;border:2px solid #fff;box-shadow:0 0 0 1px var(--edge);color:#fff;background:linear-gradient(135deg,#ff9a3c,#ffd27a)}
+kbd,.page select,.settings select{background:#fff;border:1px solid var(--edge);border-radius:2px;color:#000}
+
+/* menus are classic white menus, dialogs are windows */
+.menu{background:#fff;color:#000;border:1px solid #808080;border-radius:0;box-shadow:2px 2px 4px rgba(0,0,0,.4);padding:2px}
+.menu-i{border-radius:0;color:#000;padding:6px 12px}
+.menu-i:hover{background:var(--sel);color:#fff}
+.menu-h{color:#215dc6}
+dialog.modal{background:var(--face);color:#000;border:1px solid #0831d9;border-radius:8px 8px 3px 3px;padding:0 0 12px}
+dialog.modal h3{background:var(--title);color:#fff;margin:0 0 12px;padding:7px 10px;font-size:13px;text-shadow:1px 1px #0f1089}
+dialog.modal form>:not(h3){margin-left:12px;margin-right:12px}
+dialog.modal input,dialog.modal textarea{background:#fff;border:1px solid var(--edge);border-radius:0;color:#000}
+#toast{background:#ffffe1;color:#000;border:1px solid #000;border-radius:8px;box-shadow:2px 2px 4px rgba(0,0,0,.3)}
+body.dragging::after{background:rgba(236,233,216,.9);color:#000;border-color:var(--sel)}
+
+/* sliders, checkboxes, scrollbars */
+input[type=range]{height:5px;border:1px solid var(--edge);border-radius:2px;background:linear-gradient(to right,var(--sel) var(--p,0%),#fff var(--p,0%))}
+input[type=range]::-webkit-slider-thumb{opacity:1;width:11px;height:19px;border-radius:2px;background:var(--xpbtn);border:1px solid #003c74}
+.switch{width:15px;height:15px;border-radius:0;border:1px solid #1c5180;background:linear-gradient(135deg,#dcdcd7,#fff)}
+.switch::after{display:none}
+.switch:checked{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7l3 3 5-6' fill='none' stroke='%2321a121' stroke-width='2.4'/%3E%3C/svg%3E") center/100% no-repeat}
+::-webkit-scrollbar{width:16px;height:16px}
+::-webkit-scrollbar-track{background:#f4f4f0}
+::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#c9daff,#b7cdfc);border:1px solid #fff;border-radius:3px;box-shadow:0 0 0 1px #a0b8ef}

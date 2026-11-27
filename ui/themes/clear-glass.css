@@ -1,0 +1,43 @@
+/*
+  @name Clear Glass
+  @author Lyre
+  @description Real see-through glass: your desktop shows behind Lyre
+  @mode dark
+  @accent #a8d8ff
+  @text #f5f8fc
+  @window acrylic
+  @preview linear-gradient(135deg,rgba(255,255,255,.75),rgba(170,210,255,.35) 40%,rgba(30,40,60,.85))
+*/
+/* @window acrylic: Lyre asks Windows for a blurred see-through window, then adds html.win-fx */
+:root{
+  font-family:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;
+  --r:20px; --glass-rgb:255,255,255; --dim-rgb:8,10,16; --dim-k:.4;
+  --line:rgba(255,255,255,.16);
+  --edge:inset 0 1px 0 rgba(255,255,255,.42),inset 1px 0 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(255,255,255,.06);
+}
+body{text-shadow:0 1px 2px rgba(0,0,0,.28)} /* readable over any wallpaper */
+
+/* the page is clear while Windows blurs the desktop behind it */
+html.win-fx,html.win-fx body{background:transparent}
+html.win-fx #bg{display:none}
+/* without the window effect (other systems, or Windows refused it): a cool glassy backdrop */
+body{background:#0b0e15}
+#bg{background-color:#0b0e15;background-image:radial-gradient(circle at 18% 12%,rgba(150,195,255,.38),transparent 48%),radial-gradient(circle at 88% 92%,rgba(255,175,225,.24),transparent 52%),radial-gradient(circle at 60% 40%,rgba(120,255,220,.10),transparent 40%)}
+
+/* panes of glass: a faint frost, bright top edge, soft shadow */
+.glass{
+  background:linear-gradient(150deg,rgba(255,255,255,calc(var(--glass-a) * .36)),rgba(255,255,255,calc(var(--glass-a) * .07)) 60%,rgba(255,255,255,calc(var(--glass-a) * .14)));
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:var(--edge),0 12px 40px rgba(0,0,0,.28);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(1.9) brightness(1.04);backdrop-filter:blur(var(--blur)) saturate(1.9) brightness(1.04);
+}
+/* popups sit over busy content, so they get a little more tint */
+.menu,dialog.modal{background:linear-gradient(150deg,rgba(40,46,60,.72),rgba(20,24,34,.78));border:1px solid rgba(255,255,255,.18);box-shadow:var(--edge),0 20px 60px rgba(0,0,0,.45)}
+
+.pill{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+.pill:hover{background:rgba(255,255,255,.15)}
+.pill.accent,.big-play,#playBtn{background:linear-gradient(180deg,#fff,#dbe9f7);color:#0e1520;box-shadow:inset 0 -1px 0 rgba(0,0,0,.12),0 6px 22px rgba(160,210,255,.35)}
+.search{box-shadow:var(--edge)}
+.card:hover,.pl-item:hover{background:rgba(255,255,255,.08)}
+.pl-item.active{background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.ln.on{color:#fff;text-shadow:0 0 22px rgba(168,216,255,.7)}

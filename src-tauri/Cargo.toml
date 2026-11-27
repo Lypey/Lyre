@@ -1,0 +1,28 @@
+[package]
+name = "lyre"
+version = "1.0.0"
+description = "Lyre: local music player"
+edition = "2021"
+
+[lib]
+name = "lyre_lib"
+# shortcut: "cdylib" is left out because the Windows GNU linker can't export that many symbols;
+# add it back ("staticlib", "cdylib", "rlib") when building for Android.
+crate-type = ["staticlib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+lofty = "0.22"
+base64 = "0.22"
+
+[profile.release]
+strip = true
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"

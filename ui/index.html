@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a080a">
+<title>Lyre</title>
+<link rel="stylesheet" href="app.css">
+<style id="themeCss"></style>
+</head>
+<body>
+<div id="bg"></div>
+
+<header id="titlebar" data-tauri-drag-region>
+  <button id="menuBtn" class="ib" title="Library" aria-label="Open library"></button>
+  <button id="backBtn" class="pill" title="Back (Esc)" hidden></button>
+  <button id="homeBtn" class="ib" title="Home" aria-label="Home"></button>
+  <label class="search glass">
+    <span id="searchIc"></span>
+    <input id="q" type="search" maxlength="100" placeholder="What do you want to play?" aria-label="Search your music" autocomplete="off">
+  </label>
+  <div class="tb-actions" data-tauri-drag-region>
+    <button id="addBtn" class="pill" title="Add music from your device"></button>
+    <button id="themeBtn" class="ib" title="Settings" aria-label="Settings" data-label="Settings"></button>
+    <button id="imBtn" class="ib" title="Lyrics mode (F)" aria-label="Lyrics mode" data-label="Lyrics"></button>
+    <button id="fsBtn" class="ib" title="Full screen (F11)" aria-label="Full screen"></button>
+    <button id="profileBtn" class="ib" title="Profile &amp; settings" aria-label="Profile and settings"></button>
+  </div>
+  <div id="winBtns" hidden>
+    <button class="ib" data-win="minimize" aria-label="Minimise"></button>
+    <button class="ib" data-win="toggleMaximize" aria-label="Maximise"></button>
+    <button class="ib close" data-win="close" aria-label="Close"></button>
+  </div>
+</header>
+
+<aside id="library" class="glass">
+  <div class="lib-head">
+    <h2>Your Library</h2>
+    <button id="createBtn" class="pill" title="New playlist"></button>
+  </div>
+  <div class="lib-sub">Playlists</div>
+  <nav id="plList" aria-label="Playlists"></nav>
+  <div class="lib-foot">
+    <button class="pill" id="addFilesBtn">+ Files</button>
+    <button class="pill" id="addFolderBtn">+ Folder</button>
+  </div>
+</aside>
+
+<main id="main" class="glass"></main>
+
+<section id="immersive" aria-label="Lyrics mode">
+  <div id="imBg"></div>
+  <div id="imVideo"></div>
+  <div id="imInfo"></div>
+  <div id="imLyrics" class="lyrics big"></div>
+</section>
+
+<footer id="player" class="glass">
+  <div class="p-info">
+    <div id="pCover" class="cover p"></div>
+    <div class="p-text"><div id="pTitle">Nothing playing</div><div id="pArtist">Add music to get started</div></div>
+    <button id="pLike" class="ib sm" title="Like" aria-label="Like"></button>
+  </div>
+  <div class="p-center">
+    <div class="p-btns">
+      <button id="shufBtn" class="ib" title="Shuffle (S)" aria-label="Shuffle"></button>
+      <button id="prevBtn" class="ib" title="Previous (Shift+←)" aria-label="Previous"></button>
+      <button id="playBtn" title="Play (Space)" aria-label="Play"></button>
+      <button id="nextBtn" class="ib" title="Next (Shift+→)" aria-label="Next"></button>
+      <button id="repBtn" class="ib" title="Repeat (R)" aria-label="Repeat"></button>
+    </div>
+    <div class="p-seek"><span id="tCur">0:00</span><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek"><span id="tDur">0:00</span></div>
+  </div>
+  <div class="p-right">
+    <button id="imBtn2" class="ib" title="Lyrics mode (F)" aria-label="Lyrics mode"></button>
+    <button id="soundBtn" class="ib" title="Sound settings" aria-label="Sound settings"></button>
+    <button id="muteBtn" class="ib" title="Mute (M)" aria-label="Mute"></button>
+    <input id="vol" type="range" min="0" max="1" step="0.01" aria-label="Volume">
+  </div>
+</footer>
+
+<div id="mediaHold" hidden><video id="media" playsinline preload="auto"></video></div>
+<input id="fileIn" type="file" multiple hidden accept="audio/*,video/*,.mp3,.m4a,.mp4,.aac,.wav,.ogg,.oga,.opus,.flac,.webm,.weba,.mkv,.mov,.m4v,.3gp,.aif,.aiff,.caf,.wma,.lrc">
+<input id="dirIn" type="file" multiple hidden webkitdirectory>
+<input id="bgIn" type="file" hidden accept="image/*">
+<input id="avIn" type="file" hidden accept="image/*">
+<input id="plIn" type="file" hidden accept=".csv,.txt,.m3u,.m3u8,text/csv,text/plain">
+<input id="themeIn" type="file" hidden accept=".css,text/css">
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="lyrics.js"></script>
+<script src="playlists.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

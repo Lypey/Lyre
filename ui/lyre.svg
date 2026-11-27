@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Lyre app icon: a lyre in the app's accent colour on black. Regenerate sizes: cd src-tauri; npx @tauri-apps/cli@^2 icon ../app-icon.svg -->
+  <rect width="1024" height="1024" fill="#000"/>
+  <g fill="none" stroke="#e8a07a" stroke-linecap="round" stroke-linejoin="round">
+    <!-- arms curving out from the base and back in, with outward-flicked horns -->
+    <path stroke-width="52" d="M432 800C318 782 246 680 262 560C276 456 368 418 362 322C358 262 318 222 274 206"/>
+    <path stroke-width="52" d="M592 800C706 782 778 680 762 560C748 456 656 418 662 322C666 262 706 222 750 206"/>
+    <!-- crossbar and base -->
+    <path stroke-width="44" d="M340 300H684"/>
+    <path stroke-width="52" d="M392 806H632"/>
+    <!-- strings -->
+    <path stroke-width="22" d="M452 300V806M512 300V806M572 300V806"/>
+  </g>
+</svg>

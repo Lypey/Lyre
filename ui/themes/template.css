@@ -1,0 +1,48 @@
+/*
+  @name My Theme
+  @author You
+  @description One line shown under the name
+  @mode dark
+  @accent #ff6b9a
+  @text #f5e9ef
+  @preview linear-gradient(135deg,#ff6b9a,#2a1030)
+
+  How it works
+  - Save this as a .css file, then Settings > Theme > Import theme (or drop it on the window).
+  - Importing a file with the same name replaces the old one.
+  - mode is dark or light (light = dark text on bright glass).
+  - accent and text are the theme's colours as #rrggbb. If the user picks a background
+    image, colours are taken from the image instead. Leave them out to always follow it.
+  - preview is any CSS background, shown on the theme card.
+  - Everything below is normal CSS and overrides the app's own styles.
+*/
+
+:root{
+  font-family:"Segoe UI",system-ui,sans-serif;  /* any installed font */
+  --r:14px;                  /* corner radius of panels */
+  --glass-rgb:20,10,25;      /* glass tint (r,g,b); the darkness slider sets the alpha */
+  --dim-rgb:0,0,0;           /* colour laid over the background */
+  --dim-k:1;                 /* how strongly the "Background dim" slider applies */
+}
+
+/* the background (used when the user has not picked their own image) */
+#bg{background-image:radial-gradient(circle at 20% 15%,#ff6b9a66,transparent 50%),linear-gradient(160deg,#2a1030,#0b0610)}
+
+/* glass panels: #library (left), #main (centre), #player (bottom bar) all use .glass */
+.glass{border-radius:var(--r)}
+
+/* useful selectors
+   #titlebar .search      search box          .pill, .pill.accent   pill buttons
+   #playBtn, .big-play    play buttons        .ib                   icon buttons
+   .card, .card.playing   songs in a playlist .pl-item, .pl-item.active  library list
+   .now, .ln, .ln.on      lyrics panel/lines  #imLyrics             full-screen lyrics
+   .menu, dialog.modal    popups              .section, .stat       settings & profile
+   input[type=range]      sliders (fill uses --p)                   .switch  toggles
+   Lyrics mode (full screen):
+   #immersive             the whole area      --im-wash             tint over the blurred cover (rgba)
+   #imBg                  song cover, blurred behind the window      #imInfo, #imInfo .cover   cover, title, artist
+   .syl / .syl.on / .syl.done   each syllable (fills by --p, -20%..120%) / being sung / already sung
+   .no-glow, .no-glass    on <html> when the user turns those effects off
+   Colours: rgb(var(--accent-rgb)), rgb(var(--text-rgb)), var(--accent), var(--text), var(--muted), var(--line)
+*/
+.ln.on{color:#fff;text-shadow:0 0 20px var(--accent)}

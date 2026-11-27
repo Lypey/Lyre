@@ -1,0 +1,1 @@
+{ "version": "0.0.1", "configurations": [ { "name": "lyre-ui", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "5178", "-d", "ui"], "port": 5178 } ] }
